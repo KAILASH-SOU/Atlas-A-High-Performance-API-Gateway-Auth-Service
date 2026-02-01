@@ -56,19 +56,19 @@ Most backend projects rely on frameworks that hide critical details like:
 ##  Architecture Overview
 
 Client
-↓
+-> 
 TCP Socket
-↓
+->
 HTTP Parsing
-↓
+-> 
 Header Parsing
-↓
+-> 
 Authentication Gate
-↓
+-> 
 Rate Limiting Gate
-↓
+-> 
 Routing & API Logic
-↓
+-> 
 JSON Response
 
 Atlas behaves like a **mini API Gateway**, similar to components used in real production systems.
