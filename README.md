@@ -2,6 +2,7 @@ Atlas
 A High-Performance C++ API Gateway & Authentication Service
 
 Atlas is a backend-heavy, production-style API service built from scratch in C++, without frameworks.
+
 The goal of this project is to deeply understand how real backend systems work internally — networking, HTTP, authentication, rate limiting, and API correctness.
 
 This project intentionally avoids high-level frameworks to expose the actual backend mechanics used in industry systems.
@@ -46,9 +47,9 @@ Where does authentication actually live?
 
 How does rate limiting protect services?
 
-Why HTTP is layered over TCP
+Why HTTP is layered over TCP?
 
-Why backend sends JSON, not objects
+Why backend sends JSON, not objects?
 
 🏗️ Architecture Overview
 Client
@@ -97,6 +98,7 @@ Per-IP rate limiting
 Example configuration:
 
 5 requests per 10 seconds
+
 
 Excess requests return:
 
