@@ -1,100 +1,96 @@
-ATLAS
+Atlas
 A High-Performance C++ API Gateway & Authentication Service
 
-OVERVIEW
+Atlas is a backend-heavy, production-style API service built from scratch in C++, without frameworks.
+The goal of this project is to deeply understand how real backend systems work internally — networking, HTTP, authentication, rate limiting, and API correctness.
 
-Atlas is a backend-heavy, production-style API service built from scratch in C++.
-The project focuses on understanding how real backend systems work internally,
-without using high-level frameworks.
+This project intentionally avoids high-level frameworks to expose the actual backend mechanics used in industry systems.
 
-This project demonstrates networking, HTTP handling, authentication, rate
-limiting, and API correctness at a low level.
-
-Atlas behaves like a mini API Gateway.
-
-KEY FEATURES
+🚀 Key Features
 
 Raw TCP server using POSIX sockets
 
-Manual HTTP request parsing and response construction
+Manual HTTP request parsing & response construction
 
 REST-style API routing
 
-JSON-based responses (representation, not objects)
+JSON serialization (representation, not objects)
 
-Token-based authentication using HTTP headers
+Token-based authentication (Authorization header)
 
 Rate limiting using Token Bucket algorithm
 
-Correct HTTP status codes and error handling
+Correct HTTP status codes & error handling
 
 Stateless backend design
 
 IP-based client identification
 
-WHY THIS PROJECT
+🧠 Why This Project?
 
 Most backend projects rely on frameworks that hide:
 
 socket handling
 
-HTTP internals
+request lifecycle
 
-authentication boundaries
+concurrency boundaries
 
-rate limiting logic
+API control logic
 
-Atlas is built to understand:
+Atlas is built to answer fundamental backend questions:
 
-how requests reach backend code
+What happens when a request hits a server?
 
-where authentication actually lives
+Where does authentication actually live?
 
-how rate limiting protects services
+How does rate limiting protect services?
 
-why HTTP is layered on top of TCP
+Why HTTP is layered over TCP
 
-why backends send JSON, not objects
+Why backend sends JSON, not objects
 
-ARCHITECTURE
-
-Request flow:
-
+🏗️ Architecture Overview
 Client
-|
+  |
 TCP Socket
-|
+  |
 HTTP Parsing
-|
+  |
 Header Parsing
-|
+  |
 Authentication Gate
-|
+  |
 Rate Limiting Gate
-|
-Routing and API Logic
-|
+  |
+Routing & API Logic
+  |
 JSON Response
 
-Atlas functions like a real API Gateway used in production systems.
 
-AUTHENTICATION
+Atlas behaves like a mini API Gateway, similar to what exists in real production systems.
 
-Authentication is token-based.
+🔐 Authentication Model
 
-Clients must send the token in the HTTP header:
+Token-based authentication
+
+Token passed via HTTP header:
 
 Authorization: Bearer secret-token-123
 
-Authentication is checked BEFORE routing logic.
+
+Authentication is enforced before routing logic
 
 Unauthorized requests return:
 
 401 Unauthorized
 
-RATE LIMITING
 
-Rate limiting is implemented using the Token Bucket algorithm.
+This models how real backend services protect APIs.
+
+🚦 Rate Limiting
+
+Implemented using Token Bucket algorithm
 
 Per-IP rate limiting
 
@@ -102,100 +98,88 @@ Example configuration:
 
 5 requests per 10 seconds
 
-If the limit is exceeded, the server responds with:
+Excess requests return:
 
 429 Too Many Requests
 
-This protects the backend from abuse and overload.
 
-API ENDPOINTS
+This demonstrates backend self-protection and fairness.
 
+📡 API Endpoints
 Health Check
-
 GET /health
 
+
 Response:
+
 200 OK
 
 List Users
-
 GET /users
 
-Response (JSON):
+
+Response:
+
 [
-{ "id": 1, "name": "Kailash" },
-{ "id": 2, "name": "Alex" }
+  { "id": 1, "name": "Kailash" },
+  { "id": 2, "name": "Alex" }
 ]
 
 Create User
-
 POST /users
 
-Request body (JSON):
+
+Request:
+
 { "name": "Kailash" }
 
+
 Responses:
 
-201 Created (success)
+201 Created → success
 
-422 Unprocessable Entity (missing or invalid field)
+422 Unprocessable Entity → missing/invalid input
 
-400 Bad Request (invalid JSON)
+400 Bad Request → invalid JSON
 
 Current User (Protected)
-
 GET /users/me
 
-Header required:
+
+Requires:
+
 Authorization: Bearer secret-token-123
+
 
 Responses:
 
-200 OK (authenticated)
+200 OK → authenticated
 
-401 Unauthorized (missing or invalid token)
+401 Unauthorized → missing/invalid token
 
-BUILD AND RUN
+🛠️ Build & Run
+Requirements
 
-Requirements:
+Linux / macOS
 
-Linux or macOS
-
-g++ compiler (C++17)
+g++ (C++17)
 
 POSIX sockets
 
-Build command:
-
+Build
 g++ src/server.cpp -Iinclude -std=c++17 -o atlas
 
-Run command:
-
+Run
 ./atlas
 
-Server runs on:
+
+Server starts on:
 
 http://localhost:8080
 
-TESTING USING CURL
-
+🧪 Testing (curl)
 curl localhost:8080/health
-
 curl localhost:8080/users
-
 curl -X POST localhost:8080/users -d '{"name":"Kailash"}'
-
 curl localhost:8080/users/me
-
 curl localhost:8080/users/me -H "Authorization: Bearer secret-token-123"
-
-DESIGN DECISIONS
-
-TCP is used to understand backend networking fundamentals.
-
-HTTP is implemented manually to expose request lifecycle details.
-
-JSON is used as a language-agnostic representation format.
-
-Authentication and rate limiting are implemented as API gates,
-not as part of business logic.
