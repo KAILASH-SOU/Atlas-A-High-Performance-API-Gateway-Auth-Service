@@ -109,22 +109,29 @@ This demonstrates **backend self-protection and fairness**.
 
 ---
 
-##  API Endpoints
+## API Endpoints
+
+---
 
 ### Health Check
-GET /health
 
-makefile
-Copy code
+**Method:** `GET`  
+**Path:** `/health`  
 
-Response:
-200 OK
-
-yaml
-Copy code
+**Response:**  
+`200 OK`
 
 ---
 
 ### List Users
-GET /users
+
+**Method:** `GET`  
+**Path:** `/users`
+
+**Response:**
+```json
+[
+  { "id": 1, "name": "Kailash" },
+  { "id": 2, "name": "Alex" }
+]
 
